@@ -1,15 +1,24 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+
 import NavBar from '@/components/Nav-bar.vue'
 </script>
 
 <template>
-  <div class="p-3">
-  <h1 class="text-center">Movie App</h1>
-  <NavBar/>
+  <div id="app" class="container text-white">
+    <div class="row border-bottom border-">
+      <div class="col-sm-2 d-flex align-items-center text-secondary fw-bold">Vue Movies</div>
+      <NavBar class="col-sm-10"/>
+    </div>
   <router-view/>
+
   </div>
 </template>
 <style scoped>
+
+#app{
+color: white;
+}
+
 
 </style>

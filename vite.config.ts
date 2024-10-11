@@ -8,6 +8,13 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
+  // css: {
+  //   preprocessorOptions: {
+  //     scss: {
+  //       additionalData: `@import "@/assets/custom.scss";`
+  //     }
+  //   }
+  // },
   server: {
     port:3000,
   },
