@@ -20,5 +20,5 @@ onMounted(() => {
 
 <template>
   <h1 class="text-center">Movies</h1>
-  <Image_carousel :movies="movies" />
+  <Image_carousel :movies="movies" data-bs-theme="light" />
 </template>

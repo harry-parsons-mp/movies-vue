@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
-// TODO: make toast service? - Allow to be present even if route changes?
+// TODO: improve navbar closing - ability to click anywhere else to close it?
 </script>
 
 <template>
-  <div id="app" class="container text-white">
+  <div id="app" class="container" data-bs-theme="dark">
     <div class="row border-bottom">
       <NavBar class="col-sm-10" />
     </div>

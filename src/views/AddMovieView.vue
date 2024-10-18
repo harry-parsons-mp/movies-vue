@@ -7,7 +7,9 @@ import { ErrorMessage, Field, Form } from 'vee-validate'
 import * as yup from 'yup'
 import { UploadImage } from '@/services/imageService'
 import { Create } from '@/services/crudService'
-import router from '@/router'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const movie = ref<Movie>({
   name: '',
@@ -45,7 +47,6 @@ const addMovie = async () => {
 <template>
   <h2>Add a movie</h2>
   <div>
-    <!--    <MovieForm :movie="movie" :file-func="handleFileChange" @submit="addMovie" />-->
     <Form @submit="addMovie" :validation-schema="schema">
       <div>
         <label for="MovieTitle">
@@ -71,6 +72,9 @@ const addMovie = async () => {
             name="description"
             id="MovieDesc"
             v-model="movie.description"
+            as="textarea"
+            cols="50"
+            rows="4"
           />
           <ErrorMessage name="description" class="text-danger" />
         </label>
@@ -106,7 +110,7 @@ const addMovie = async () => {
         /></label>
         <ErrorMessage name="image" class="text-danger" />
       </div>
-      <button class="btn btn-light">Submit</button>
+      <button class="btn btn-dark">Submit</button>
     </Form>
   </div>
 </template>

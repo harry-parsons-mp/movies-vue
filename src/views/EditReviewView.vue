@@ -5,10 +5,10 @@ import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import type { Review } from '@/models/Review'
 import { Get, Update } from '@/services/crudService'
-import { useRoute } from 'vue-router'
-import router from '@/router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 const id = route.params.id
 
 const review = ref<Review>({
@@ -17,7 +17,8 @@ const review = ref<Review>({
   score: null,
   content: '',
   userID: null,
-  movieID: null
+  movieID: null,
+  movie: []
 })
 
 const updateReview = async () => {
@@ -30,8 +31,8 @@ const updateReview = async () => {
       userID: review.value.userID,
       movieID: review.value.movieID
     })
-    await router.push(`/movies/${response.movie.id}`)
-    toast('Review Updated')
+    // await router.push(`/movies/${response.movie.id}`)
+    toast.success('Review Updated')
   } catch (e) {
     console.error('Error updating review', e)
     toast.error('Failed to update review')
@@ -54,7 +55,9 @@ onMounted(() => {
 
 <template>
   <div>Update review</div>
-
+  <router-link :to="{ name: 'MovieDetail', params: { id: review.movie.id } }" class="fs-5"
+    >Back</router-link
+  >
   <Form @submit="updateReview">
     <div class="mb-3">
       <label for="title"
@@ -93,7 +96,7 @@ onMounted(() => {
         ></Field
       ></label>
       <div class="mb-3">
-        <button class="btn btn-light">Submit</button>
+        <button class="btn btn-dark">Save</button>
       </div>
     </div>
   </Form>

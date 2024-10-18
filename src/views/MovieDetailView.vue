@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import Reviews from '@/components/Reviews.vue'
 import WriteReview from '@/components/WriteReview.vue'
 import { useAuthStore } from '@/stores/auth'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
-import router from '@/router'
 import { Delete, Get } from '@/services/crudService'
 
 const route = useRoute()
+const router = useRouter()
+
 const movieID = route.params.id
 const movie = ref([])
 const authStore = useAuthStore()
@@ -21,7 +22,11 @@ const getMovieData = async () => {
     console.error('Error fetching movie', error)
   }
 }
-
+const confirmation = (id: number) => {
+  if (window.confirm('Are you sure?')) {
+    deleteMovie(id)
+  }
+}
 const deleteMovie = async (id) => {
   try {
     await Delete('movies', id)
@@ -48,36 +53,52 @@ onMounted(() => {
 
 <template>
   <div id="movie-info">
-    <h2 class="text-decoration-underline">{{ movie.name }}</h2>
-    <div class="image-container">
-      <img v-if="movie.image_url !== ''" :src="`http://localhost:1234/${movie.image_url}`" />
+    <div class="d-inline-flex flex-row align-items-center">
+      <h2 class="text-decoration-underline px-3">{{ movie.name }}</h2>
+      <div class="border rounded-4 ps-3 px-3 text fs-5 h-25">{{ movie.genre }}</div>
     </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="image-container">
+            <img
+              v-if="movie.image_url !== ''"
+              :src="`http://localhost:1234/${movie.image_url}`"
+              class="img-fluid"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-md-6 border">
+          <div>Description:</div>
+          <div>{{ movie.description }}</div>
+        </div>
+      </div>
 
-    <div>{{ movie.description }}</div>
-    <div>{{ movie.genre }}</div>
-    <button class="btn btn-danger" @click="deleteMovie(movie.id)">Delete</button>
-    <router-link :to="{ name: 'editMovie', params: { id: movie.id } }" class="btn btn-light"
-      >Edit</router-link
-    >
-    <div>
-      <div id="movie-reviews">
-        <h4 class="text-decoration-underline">Reviews</h4>
-        <div v-for="review in movie.reviews" :key="review.ID">
-          <Reviews
-            :review="review"
-            :user="review.user"
-            class="border rounded"
-            @customEvent="getMovieData"
-          />
+      <router-link :to="{ name: 'editMovie', params: { id: movie.id } }" class="btn btn-light">
+        Edit
+      </router-link>
+      <button class="btn btn-danger m-3" @click="confirmation(movie.id)">Delete</button>
+
+      <div>
+        <div id="movie-reviews">
+          <h4 class="text-decoration-underline">Reviews</h4>
+          <div v-for="review in movie.reviews" :key="review.ID">
+            <Reviews
+              :review="review"
+              :user="review.user"
+              class="border rounded"
+              @customEvent="getMovieData"
+            />
+          </div>
+          <div v-if="authStore.isAuthed">
+            <WriteReview
+              :movieID="parseInt(movieID)"
+              :userID="authStore.user.ID"
+              @customEvent="getMovieData"
+            />
+          </div>
+          <div v-else>Need to login to write a review</div>
         </div>
-        <div v-if="authStore.isAuthed">
-          <WriteReview
-            :movieID="parseInt(movieID)"
-            :userID="authStore.user.ID"
-            @customEvent="getMovieData"
-          />
-        </div>
-        <div v-else>Need to login to write a review</div>
       </div>
     </div>
   </div>
@@ -85,12 +106,14 @@ onMounted(() => {
 
 <style scoped>
 .image-container {
-  max-height: 50vh !important;
   overflow: hidden;
+  //height: 50%;
+  position: relative;
 }
 
 .image-container img {
-  max-height: inherit;
   object-fit: contain;
+  max-height: 60vh;
+  width: 100%;
 }
 </style>

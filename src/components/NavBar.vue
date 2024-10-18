@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { toast } from 'vue3-toastify'
-import router from '@/router'
 
 const authStore = useAuthStore()
-
+const router = useRouter()
 const logout = async () => {
   authStore.logout()
+  collapseNav()
   await router.push('/')
   toast.success('Logout successful')
+}
+
+const collapseNav = () => {
+  const navbarCollapse = document.getElementById('navbarSupportedContent')
+  navbarCollapse.classList.remove('show')
 }
 </script>
 
@@ -32,13 +37,19 @@ const logout = async () => {
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'home' }">Home</router-link>
+            <router-link class="nav-link" :to="{ name: 'home' }" @click="collapseNav"
+              >Home</router-link
+            >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'MovieList' }">Movie List</router-link>
+            <router-link class="nav-link" :to="{ name: 'MovieList' }" @click="collapseNav"
+              >Movie List</router-link
+            >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'AddMovie' }">Add Movie</router-link>
+            <router-link class="nav-link" :to="{ name: 'AddMovie' }" @click="collapseNav"
+              >Add Movie</router-link
+            >
           </li>
         </ul>
         <span class="navbar-text" v-if="authStore.isAuthed">

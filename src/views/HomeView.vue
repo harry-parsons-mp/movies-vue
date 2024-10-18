@@ -62,6 +62,8 @@ const handleLogin = async () => {
       </div>
     </Form>
   </div>
+  <div>The best place to browse movies!</div>
+  <div>Most importantly build using Vuels</div>
 </template>
 
 <style scoped></style>
