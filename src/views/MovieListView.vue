@@ -1,45 +1,24 @@
 <script setup lang="ts">
-import axios from 'axios'
-import { onMounted } from 'vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Image_carousel from '@/components/Image_carousel.vue'
+import { List } from '@/services/crudService'
 
 const movies = ref([])
 
-
-function limitString(str: string, charLimit: number){
-  if(str.length <= charLimit){
-    return str
-  }
-  else {
-    return str.slice(0, charLimit) + '...'
-  }
-}
-
-async function getMovieData() {
+const getMovieData = async () => {
   try {
-    const response = await axios.get('http://localhost:1234/movies')
-    movies.value = response.data
-     console.log(movies.value)
-  }
-  catch(error) {
+    movies.value = await List('movies')
+  } catch (error) {
     console.error('Error fetching movies', error)
   }
 }
 
-
 onMounted(() => {
   getMovieData()
-
 })
-
-
 </script>
 
 <template>
   <h1 class="text-center">Movies</h1>
-  <Image_carousel :movies="movies"/>
-
-
+  <Image_carousel :movies="movies" />
 </template>
-

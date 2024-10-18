@@ -1,7 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MovieDetail from '@/views/MovieDetailView.vue'
-import MovieList from '@/views/MovieListView.vue'
-import HomeView from '@/views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,19 +6,41 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: () => import('@/views/HomeView.vue')
     },
     {
       path: '/movies',
       name: 'MovieList',
-      component: MovieList
+      component: () => import('@/views/MovieListView.vue')
     },
     {
       path: '/movies/:id',
       name: 'MovieDetail',
-      component: MovieDetail
+      component: () => import('@/views/MovieDetailView.vue')
+    },
+    {
+      path: '/movies/add',
+      name: 'AddMovie',
+      component: () => import('@/views/AddMovieView.vue')
+    },
+    {
+      path: '/movies/edit/:id',
+      name: 'editMovie',
+      component: () => import('@/views/EditMovieView.vue')
+    },
+    {
+      path: '/reviews/edit/:id',
+      name: 'editReview',
+      component: () => import('@/views/EditReviewView.vue')
     }
   ]
 })
 
+// Checks if 'authenticated' before allowing user to other routes
+// router.beforeEach(async (to, from) => {
+//   const authStore = useAuthStore()
+//   if (!authStore.isAuthed && to.name !== 'home') {
+//     return { name: 'home' }
+//   }
+// })
 export default router
